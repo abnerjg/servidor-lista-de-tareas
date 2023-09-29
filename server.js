@@ -15,3 +15,13 @@ app.get('/tasks', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor en ejecución en http://localhost:${port}`);
 });
+
+const listViewRouter = require('./list-view-router');
+const listEditRouter = require('./list-edit-router');
+
+app.use('/list-view', listViewRouter);
+app.use('/list-edit', listEditRouter);
+
+app.listen(port, () => {
+  console.log(`Servidor en ejecución en http://localhost:${port}`);
+});
