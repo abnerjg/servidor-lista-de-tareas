@@ -1,15 +1,13 @@
 const express = require('express');
 const listViewRouter = express.Router();
 
-listViewRouter.get('/completed', (req, res) => {
- 
-  res.send('Lista de tareas completas');
-});
-
-
-listViewRouter.get('/incomplete', (req, res) => {
-  
-  res.send('Lista de tareas incompletas');
-});
-
-module.exports = listViewRouter;
+listEditRouter.post('/create', (req, res) => {
+    const { description, completed } = req.body;
+    const newTask = {
+      id: tasks.length + 1,
+      description,
+      completed,
+    };
+    tasks.push(newTask);
+    res.json(newTask);
+  });

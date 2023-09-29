@@ -1,23 +1,38 @@
 const express = require('express');
 const listEditRouter = express.Router();
 
-// Ruta para crear una tarea (POST)
 listEditRouter.post('/create', (req, res) => {
-  // Aquí debes implementar la lógica para crear una nueva tarea
-  res.send('Nueva tarea creada');
-});
-
-// Ruta para eliminar una tarea (DELETE)
-listEditRouter.delete('/delete/:taskId', (req, res) => {
-  const taskId = req.params.taskId;
+    const { description, completed } = req.body;
+    const newTask = {
+      id: tasks.length + 1,
+      description,
+      completed,
+    };
+    tasks.push(newTask);
+    res.json(newTask);
+  });
   
-  res.send(`Tarea con ID ${taskId} eliminada`);
-});
+  listEditRouter.delete('/delete/:taskId', (req, res) => {
+    const taskId = parseInt(req.params.taskId);
+    const taskIndex = tasks.findIndex(task => task.id === taskId);
+    if (taskIndex !== -1) {
+      tasks.splice(taskIndex, 1);
+      res.send(`Tarea con ID ${taskId} eliminada`);
+    } else {
+      res.status(404).send('Tarea no encontrada');
+    }
+  });
 
-listEditRouter.put('/update/:taskId', (req, res) => {
-  const taskId = req.params.taskId;
- 
-  res.send(`Tarea con ID ${taskId} actualizada`);
-});
-
-module.exports = listEditRouter;
+  listEditRouter.put('/update/:taskId', (req, res) => {
+    const taskId = parseInt(req.params.taskId);
+    const { description, completed } = req.body;
+    const taskIndex = tasks.findIndex(task => task.id === taskId);
+    if (taskIndex !== -1) {
+      tasks[taskIndex] = { id: taskId, description, completed };
+      res.json(tasks[taskIndex]);
+    } else {
+      res.status(404).send('Tarea no encontrada');
+    }
+  });
+  
+  module.exports = listEditRouter;
