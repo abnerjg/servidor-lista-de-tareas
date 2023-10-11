@@ -18,7 +18,7 @@ router.use((req, res, next) => {
     // if (!requestBody.nombre || !requestBody.descripcion) {
     //   return res.status(400).json({ error: 'Faltan atributos necesarios.' });
     // }
-  }
+}
 
   // Si no se cumple ninguna de las condiciones anteriores, pasa al siguiente middleware
   next();

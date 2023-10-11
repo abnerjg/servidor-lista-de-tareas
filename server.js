@@ -25,3 +25,12 @@ app.use('/list-edit', listEditRouter);
 app.listen(port, () => {
   console.log(`Servidor en ejecución en http://localhost:${port}`);
 });
+
+// Middleware para gestionar métodos HTTP válidos
+app.use((req, res, next) => {
+  if (req.method === 'GET' || req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
+    next();
+  } else {
+    res.status(405).send('Método HTTP no permitido');
+  }
+});

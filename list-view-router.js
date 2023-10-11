@@ -11,3 +11,13 @@ listEditRouter.post('/create', (req, res) => {
     tasks.push(newTask);
     res.json(newTask);
   });
+
+  // Middleware para gestionar la validez de los parámetros
+router.use('/:parametro', (req, res, next) => {
+  const parametro = req.params.parametro;
+  if (parametro && parametro.length > 0) {
+    next();
+  } else {
+    res.status(400).send('Parámetro incorrecto');
+  }
+});
