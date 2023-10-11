@@ -1,38 +1,28 @@
 const express = require('express');
-const listEditRouter = express.Router();
+const router = express.Router();
 
-listEditRouter.post('/create', (req, res) => {
-    const { description, completed } = req.body;
-    const newTask = {
-      id: tasks.length + 1,
-      description,
-      completed,
-    };
-    tasks.push(newTask);
-    res.json(newTask);
-  });
-  
-  listEditRouter.delete('/delete/:taskId', (req, res) => {
-    const taskId = parseInt(req.params.taskId);
-    const taskIndex = tasks.findIndex(task => task.id === taskId);
-    if (taskIndex !== -1) {
-      tasks.splice(taskIndex, 1);
-      res.send(`Tarea con ID ${taskId} eliminada`);
-    } else {
-      res.status(404).send('Tarea no encontrada');
+// Middleware para manejar errores en las solicitudes POST y PUT
+router.use((req, res, next) => {
+  if (req.method === 'POST' || req.method === 'PUT') {
+    if (req.headers['content-type'] !== 'application/json') {
+      return res.status(400).json({ error: 'La solicitud debe ser en formato JSON.' });
     }
-  });
 
-  listEditRouter.put('/update/:taskId', (req, res) => {
-    const taskId = parseInt(req.params.taskId);
-    const { description, completed } = req.body;
-    const taskIndex = tasks.findIndex(task => task.id === taskId);
-    if (taskIndex !== -1) {
-      tasks[taskIndex] = { id: taskId, description, completed };
-      res.json(tasks[taskIndex]);
-    } else {
-      res.status(404).send('Tarea no encontrada');
+    const requestBody = req.body;
+
+    if (!requestBody || Object.keys(requestBody).length === 0) {
+      return res.status(400).json({ error: 'El cuerpo de la solicitud no puede estar vacío.' });
     }
-  });
-  
-  module.exports = listEditRouter;
+    // Agrega validaciones adicionales para atributos no válidos o faltantes aquí
+    // Por ejemplo:
+    // if (!requestBody.nombre || !requestBody.descripcion) {
+    //   return res.status(400).json({ error: 'Faltan atributos necesarios.' });
+    // }
+  }
+
+  // Si no se cumple ninguna de las condiciones anteriores, pasa al siguiente middleware
+  next();
+});
+
+// Define tus rutas y controladores aquí
+module.exports = router;
